@@ -1,16 +1,19 @@
-const studentmodel = new mongoose.schema({
-    reg : {
-        type : String,
-        required : true
-    },
-    name : {
-        type : String,
-        required : true
-    },
-    date : {
-        type : String,
-        required : true
-    }
-})
+import mongoose from "mongoose";
 
-export default mongoose.model('students',studentModel);
+const studentModel = new mongoose.Schema({ // Ensure "Schema" is capitalized
+    reg: {
+        type: String,
+        required: true
+    },
+    name: {
+        type: String,
+        required: true
+    },
+    date: {
+        type: String,
+        required: true
+    }
+});
+
+const Student = mongoose.model('students', studentModel);
+export default Student;
