@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaEdit, FaPlus } from "react-icons/fa";
 import { FaTrashAlt } from "react-icons/fa";
 import axios from "axios";
@@ -20,6 +20,22 @@ function App() {
       reg: '20APC1003'
     },
   ]);
+
+  const [studentLoaded,setStudentsLoaded] = useState(false)
+
+  useEffect(() => {
+    if (!studentLoaded) {
+      axios.get("http://localhost:5000/students")
+        .then((res) => {
+          setSampleStudentData(res.data);  // Set the data, not the flag
+          setStudentsLoaded(true);         // Update the flag
+        })
+        .catch((error) => {
+          console.error("Error fetching students:", error);
+        });
+    }
+  }, [studentLoaded]);
+  
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newStudent, setNewStudent] = useState({ name: "", date: "", reg: "" });
@@ -76,7 +92,12 @@ function App() {
               <button className="p-2 text-blue-500 hover:text-blue-700 transition duration-200">
                 <FaEdit />
               </button>
-              <button className="p-2 text-red-500 hover:text-red-700 transition duration-200">
+              <button className="p-2 text-red-500 hover:text-red-700 transition duration-200" onClick={()=>{
+                axios.delete(`http://localhost:5000/students/${std.reg}`)
+                .then(()=>{
+                  setStudentsLoaded(false)
+                })
+                }}>
                 <FaTrashAlt />
               </button>
             </div>

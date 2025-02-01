@@ -32,7 +32,7 @@ app.post('/students', (req, res) => {
     const studentData = req.body;
     const student = new Student(studentData);
     student.save()
-        .then(() => {
+        .then((res) => {
             res.send("Student added");
         })
         .catch((error) => {
@@ -40,6 +40,19 @@ app.post('/students', (req, res) => {
             res.status(500).send(error);
         });
 });
+
+app.delete('/students/:reg', (req, res) => {
+    const reg = req.params.reg;
+    Student.findOneAndDelete({ reg })  // Query object: find student by `reg`
+        .then(() => {
+            res.send("Student deleted");
+        })
+        .catch((error) => {
+            console.error('Error deleting student:', error);
+            res.status(500).send(error);
+        });
+});
+
 
 app.get("/students", (req, res) => {
     Student.find().then((students) => {
